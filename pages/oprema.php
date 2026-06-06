@@ -8,11 +8,18 @@ Session::requireLogin();
 $oprema = new Oprema();
 $svaOprema = $oprema->read();
 
-// Brisanje
+$poruka = '';
+
 if (isset($_GET['delete'])) {
     $oprema->delete($_GET['delete']);
-    header("Location: oprema.php");
+    header("Location: oprema.php?uspeh=obrisano");
     exit();
+}
+
+if (isset($_GET['uspeh'])) {
+    if ($_GET['uspeh'] == 'dodato') $poruka = '✅ Oprema uspešno dodata!';
+    if ($_GET['uspeh'] == 'izmenjeno') $poruka = '✅ Oprema uspešno izmenjena!';
+    if ($_GET['uspeh'] == 'obrisano') $poruka = '🗑️ Oprema uspešno obrisana!';
 }
 ?>
 
@@ -43,6 +50,9 @@ if (isset($_GET['delete'])) {
 </nav>
 
 <div class="container mt-4">
+    <?php if ($poruka): ?>
+    <div class="alert alert-success"><?= $poruka ?></div>
+<?php endif; ?>
     <div class="row mb-3">
         <div class="col">
             <h2>⚽ Evidencija Opreme</h2>

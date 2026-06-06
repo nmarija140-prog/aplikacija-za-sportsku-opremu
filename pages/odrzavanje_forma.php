@@ -24,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $odrzavanje->create($_POST);
     }
-    header("Location: odrzavanje.php");
+   $akcija = isset($_POST['id']) && $_POST['id'] ? 'izmenjeno' : 'dodato';
+header("Location: odrzavanje.php?uspeh=" . $akcija);
     exit();
 }
 ?>

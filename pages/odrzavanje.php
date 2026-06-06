@@ -6,12 +6,20 @@ Session::start();
 Session::requireLogin();
 
 $odrzavanje = new Odrzavanje();
-$svoOdrzavanje = $odrzavanje->read();
+$sviOdrzavanje = $odrzavanje->read();
+
+$poruka = '';
 
 if (isset($_GET['delete'])) {
     $odrzavanje->delete($_GET['delete']);
-    header("Location: odrzavanje.php");
+    header("Location: odrzavanje.php?uspeh=obrisano");
     exit();
+}
+
+if (isset($_GET['uspeh'])) {
+    if ($_GET['uspeh'] == 'dodato') $poruka = '✅ Odrzavanje uspešno dodato!';
+    if ($_GET['uspeh'] == 'izmenjeno') $poruka = '✅ Odrzavanje uspešno izmenjen0!';
+    if ($_GET['uspeh'] == 'obrisano') $poruka = '🗑️ Odrzavanje uspešno obrisan0!';
 }
 ?>
 
@@ -43,6 +51,9 @@ if (isset($_GET['delete'])) {
 
 <div class="container mt-4">
     <div class="row mb-3">
+        <?php if ($poruka): ?>
+    <div class="alert alert-success"><?= $poruka ?></div>
+<?php endif; ?>
         <div class="col">
             <h2>🔧 Evidencija Održavanja</h2>
         </div>

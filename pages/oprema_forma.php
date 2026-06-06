@@ -9,13 +9,12 @@ Session::requireLogin();
 $oprema = new Oprema();
 $db = Database::getInstance()->getConnection();
 
-// Dohvati prostorije za dropdown
-$prostorije = $db->query("SELECT * FROM prostorije")->fetch_all(MYSQLI_ASSOC);
+
+$prostorije = $db->query("SELECT * FROM PROSTORIJE")->fetch_all(MYSQLI_ASSOC);
 
 $podaci = ['naziv' => '', 'tip' => '', 'kolicina' => 1, 'stanje' => 'ispravna', 'prostorija_id' => '', 'datum_nabavke' => ''];
 $id = null;
 
-// Ako je edit mod
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $podaci = $oprema->read($id);
@@ -28,7 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $oprema->create($_POST);
     }
-    header("Location: oprema.php");
+   $akcija = isset($_POST['id']) && $_POST['id'] ? 'izmenjeno' : 'dodato';
+header("Location: oprema.php?uspeh=" . $akcija);
     exit();
 }
 ?>

@@ -20,7 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $nastavnici->create($_POST);
     }
-    header("Location: nastavnici.php");
+    $akcija = isset($_POST['id']) && $_POST['id'] ? 'izmenjeno' : 'dodato';
+header("Location: nastavnici.php?uspeh=" . $akcija);
     exit();
 }
 ?>

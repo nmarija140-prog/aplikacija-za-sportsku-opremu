@@ -8,10 +8,18 @@ Session::requireLogin();
 $nastavnici = new Nastavnici();
 $sviNastavnici = $nastavnici->read();
 
+$poruka = '';
+
 if (isset($_GET['delete'])) {
     $nastavnici->delete($_GET['delete']);
-    header("Location: nastavnici.php");
+    header("Location: nastavnici.php?uspeh=obrisano");
     exit();
+}
+
+if (isset($_GET['uspeh'])) {
+    if ($_GET['uspeh'] == 'dodato') $poruka = '✅ Nastavnik uspešno dodat!';
+    if ($_GET['uspeh'] == 'izmenjeno') $poruka = '✅ Nastavnik uspešno izmenjen!';
+    if ($_GET['uspeh'] == 'obrisano') $poruka = '🗑️ Nastavnik uspešno obrisan!';
 }
 ?>
 
@@ -43,6 +51,9 @@ if (isset($_GET['delete'])) {
 
 <div class="container mt-4">
     <div class="row mb-3">
+        <?php if ($poruka): ?>
+    <div class="alert alert-success"><?= $poruka ?></div>
+<?php endif; ?>
         <div class="col">
             <h2>👨‍🏫 Evidencija Nastavnika</h2>
         </div>

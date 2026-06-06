@@ -5,13 +5,21 @@ require_once '../classes/Zaduzenja.php';
 Session::start();
 Session::requireLogin();
 
-$zaduzenja = new Zaduzenja();
-$svaZaduzenja = $zaduzenja->read();
+$nzaduzenja = new Zaduzenja();
+$sviZaduzenja = $Zaduzenja->read();
+
+$poruka = '';
 
 if (isset($_GET['delete'])) {
     $zaduzenja->delete($_GET['delete']);
-    header("Location: zaduzenja.php");
+    header("Location: zaduzenja.php?uspeh=obrisano");
     exit();
+}
+
+if (isset($_GET['uspeh'])) {
+    if ($_GET['uspeh'] == 'dodato') $poruka = '✅ Zaduzenje uspešno dodato!';
+    if ($_GET['uspeh'] == 'izmenjeno') $poruka = '✅ Zaduzenje uspešno izmenjeno!';
+    if ($_GET['uspeh'] == 'obrisano') $poruka = '🗑️ Zaduzenje uspešno obrisano!';
 }
 ?>
 
@@ -43,6 +51,9 @@ if (isset($_GET['delete'])) {
 
 <div class="container mt-4">
     <div class="row mb-3">
+        <?php if ($poruka): ?>
+    <div class="alert alert-success"><?= $poruka ?></div>
+<?php endif; ?>
         <div class="col">
             <h2>📋 Evidencija Zaduženja</h2>
         </div>

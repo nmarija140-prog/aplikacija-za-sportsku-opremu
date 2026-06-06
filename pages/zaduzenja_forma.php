@@ -28,7 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $zaduzenja->create($_POST);
     }
-    header("Location: zaduzenja.php");
+    $akcija = isset($_POST['id']) && $_POST['id'] ? 'izmenjeno' : 'dodato';
+header("Location: zaduzenja.php?uspeh=" . $akcija);
     exit();
 }
 ?>
