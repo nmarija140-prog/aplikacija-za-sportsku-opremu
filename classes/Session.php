@@ -19,4 +19,10 @@ class Session {
         header("Location: ../login.php");
         exit();
     }
+     public static function requireLogin() {
+        if (!self::isLoggedIn()) {
+            header("Location: login.php");
+            exit();
+        }
+    }
 }

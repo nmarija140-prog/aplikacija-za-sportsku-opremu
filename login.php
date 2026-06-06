@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: index.php");
         exit();
     } else {
-        $greska = "Pogrešan email ili lozinka!";
+       $greska = "Pogrešan email ili lozinka! Email: " . $_POST['email'];
     }
 }
 ?>
@@ -36,11 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="bg-light">
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
+<div class="container">
+    <div class="row justify-content-center min-vh-100 align-items-center">
+        <div class="col-md-4">
+    <div class="card shadow">
+        <div class="card-header text-white text-center" style="background-color: #7B5EA7;">
                     <h4>🏫 Sportska Oprema - Prijava</h4>
                 </div>
                 <div class="card-body">
@@ -55,15 +55,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Lozinka</label>
-                            <input type="password" name="lozinka" class="form-control" required>
+                            <div class="input-group">
+                                <input type="password" name="lozinka" id="lozinka" class="form-control" required>
+                                <button class="btn btn-outline-secondary" type="button" onclick="toggleLozinka()">
+                                    👁️
+                                </button>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Prijavi se</button>
+                        <button type="submit" class="btn w-100 text-white" style="background-color: #0D47A1;">Prijavi se</button>
                     </form>
                     
                     <hr>
                     <p class="text-center">Nemate nalog? 
                         <a href="register.php">Registrujte se</a>
                     </p>
+                    <div class="text-center pb-3">
+                        <img src="sport-slika.svg" alt="Sport" style="max-width: 250px; width: 100%;">
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,5 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function toggleLozinka() {
+    const input = document.getElementById('lozinka');
+    input.type = input.type === 'password' ? 'text' : 'password';
+}
+</script>
 </body>
 </html>
