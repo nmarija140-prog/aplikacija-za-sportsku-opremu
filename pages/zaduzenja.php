@@ -5,8 +5,8 @@ require_once '../classes/Zaduzenja.php';
 Session::start();
 Session::requireLogin();
 
-$nzaduzenja = new Zaduzenja();
-$sviZaduzenja = $Zaduzenja->read();
+$zaduzenja = new Zaduzenja();
+$svaZaduzenja = $zaduzenja->read();
 
 $poruka = '';
 
@@ -17,9 +17,9 @@ if (isset($_GET['delete'])) {
 }
 
 if (isset($_GET['uspeh'])) {
-    if ($_GET['uspeh'] == 'dodato') $poruka = '✅ Zaduzenje uspešno dodato!';
-    if ($_GET['uspeh'] == 'izmenjeno') $poruka = '✅ Zaduzenje uspešno izmenjeno!';
-    if ($_GET['uspeh'] == 'obrisano') $poruka = '🗑️ Zaduzenje uspešno obrisano!';
+    if ($_GET['uspeh'] == 'dodato') $poruka = '✅ Zaduženje uspešno dodato!';
+    if ($_GET['uspeh'] == 'izmenjeno') $poruka = '✅ Zaduženje uspešno izmenjeno!';
+    if ($_GET['uspeh'] == 'obrisano') $poruka = '🗑️ Zaduženje uspešno obrisano!';
 }
 ?>
 
@@ -50,15 +50,22 @@ if (isset($_GET['uspeh'])) {
 </nav>
 
 <div class="container mt-4">
+    <?php if ($poruka): ?>
+        <div class="alert alert-success"><?= $poruka ?></div>
+    <?php endif; ?>
+
     <div class="row mb-3">
-        <?php if ($poruka): ?>
-    <div class="alert alert-success"><?= $poruka ?></div>
-<?php endif; ?>
         <div class="col">
             <h2>📋 Evidencija Zaduženja</h2>
         </div>
         <div class="col text-end">
             <a href="zaduzenja_forma.php" class="btn btn-success">+ Dodaj zaduženje</a>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text" id="pretraga" class="form-control" placeholder="🔍 Pretraži po opremi...">
         </div>
     </div>
 
@@ -96,5 +103,15 @@ if (isset($_GET['uspeh'])) {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.getElementById('pretraga').addEventListener('keyup', function() {
+    let vrednost = this.value.toLowerCase();
+    let redovi = document.querySelectorAll('tbody tr');
+    redovi.forEach(function(red) {
+        let oprema = red.cells[1].textContent.toLowerCase();
+        red.style.display = oprema.includes(vrednost) ? '' : 'none';
+    });
+});
+</script>
 </body>
 </html>

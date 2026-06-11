@@ -5,6 +5,7 @@ require_once '../classes/Nastavnici.php';
 Session::start();
 Session::requireLogin();
 
+
 $nastavnici = new Nastavnici();
 $sviNastavnici = $nastavnici->read();
 
@@ -50,15 +51,24 @@ if (isset($_GET['uspeh'])) {
 </nav>
 
 <div class="container mt-4">
+    <?php if ($poruka): ?>
+        <div class="alert alert-success"><?= $poruka ?></div>
+    <?php endif; ?>
+
     <div class="row mb-3">
-        <?php if ($poruka): ?>
-    <div class="alert alert-success"><?= $poruka ?></div>
-<?php endif; ?>
         <div class="col">
             <h2>👨‍🏫 Evidencija Nastavnika</h2>
         </div>
         <div class="col text-end">
-            <a href="nastavnici_forma.php" class="btn btn-success">+ Dodaj nastavnika</a>
+            <?php if (Session::get('korisnik_uloga') === 'admin'): ?>
+    <a href="nastavnici_forma.php" class="btn btn-success">+ Dodaj nastavnika</a>
+<?php endif; ?>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text" id="pretraga" class="form-control" placeholder="🔍 Pretraži po prezimenu...">
         </div>
     </div>
 
@@ -85,8 +95,10 @@ if (isset($_GET['uspeh'])) {
                     <td><?= $n['telefon'] ?></td>
                     <td><?= $n['predmet'] ?></td>
                     <td>
-                        <a href="nastavnici_forma.php?id=<?= $n['id'] ?>" class="btn btn-sm btn-warning">✏️</a>
-                        <a href="nastavnici.php?delete=<?= $n['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Obrisati?')">🗑️</a>
+                        <?php if (Session::get('korisnik_uloga') === 'admin'): ?>
+    <a href="nastavnici_forma.php?id=<?= $n['id'] ?>" class="btn btn-sm btn-warning">✏️</a>
+    <a href="nastavnici.php?delete=<?= $n['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Obrisati?')">🗑️</a>
+<?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -96,5 +108,17 @@ if (isset($_GET['uspeh'])) {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.getElementById('pretraga').addEventListener('keyup', function() {
+    let vrednost = this.value.toLowerCase();
+    let redovi = document.querySelectorAll('tbody tr');
+    redovi.forEach(function(red) {
+        let ime = red.cells[1].textContent.toLowerCase();
+        let prezime = red.cells[2].textContent.toLowerCase();
+        let prikazi = ime.includes(vrednost) || prezime.includes(vrednost);
+        red.style.display = prikazi ? '' : 'none';
+    });
+});
+</script>
 </body>
 </html>

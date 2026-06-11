@@ -5,6 +5,10 @@ require_once '../classes/Database.php';
 
 Session::start();
 Session::requireLogin();
+if (Session::get('korisnik_uloga') !== 'admin') {
+    header("Location: ../index.php");
+    exit();
+}
 
 $oprema = new Oprema();
 $db = Database::getInstance()->getConnection();
@@ -74,10 +78,17 @@ header("Location: oprema.php?uspeh=" . $akcija);
                             <label class="form-label">Naziv</label>
                             <input type="text" name="naziv" class="form-control" value="<?= $podaci['naziv'] ?>" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tip</label>
-                            <input type="text" name="tip" class="form-control" value="<?= $podaci['tip'] ?>">
-                        </div>
+                       <div class="mb-3">
+                       <label class="form-label">Tip</label>
+                     <select name="tip" class="form-select">
+                       <option value="">-- Izaberi tip --</option>
+                     <option value="Lopta" <?= $podaci['tip'] == 'Lopta' ? 'selected' : '' ?>>Lopta</option>
+                       <option value="Rekvizit" <?= $podaci['tip'] == 'Rekvizit' ? 'selected' : '' ?>>Rekvizit</option>
+                        <option value="Oprema sale" <?= $podaci['tip'] == 'Oprema sale' ? 'selected' : '' ?>>Oprema sale</option>
+                         <option value="Zaštitna oprema" <?= $podaci['tip'] == 'Zaštitna oprema' ? 'selected' : '' ?>>Zaštitna oprema</option>
+                         <option value="Atletska oprema" <?= $podaci['tip'] == 'Atletska oprema' ? 'selected' : '' ?>>Atletska oprema</option>
+                        </select>
+                            </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Količina</label>

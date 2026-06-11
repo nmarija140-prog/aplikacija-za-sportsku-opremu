@@ -6,7 +6,7 @@ Session::start();
 Session::requireLogin();
 
 $odrzavanje = new Odrzavanje();
-$sviOdrzavanje = $odrzavanje->read();
+$svoOdrzavanje = $odrzavanje->read();
 
 $poruka = '';
 
@@ -17,9 +17,9 @@ if (isset($_GET['delete'])) {
 }
 
 if (isset($_GET['uspeh'])) {
-    if ($_GET['uspeh'] == 'dodato') $poruka = '✅ Odrzavanje uspešno dodato!';
-    if ($_GET['uspeh'] == 'izmenjeno') $poruka = '✅ Odrzavanje uspešno izmenjen0!';
-    if ($_GET['uspeh'] == 'obrisano') $poruka = '🗑️ Odrzavanje uspešno obrisan0!';
+    if ($_GET['uspeh'] == 'dodato') $poruka = '✅ Održavanje uspešno dodato!';
+    if ($_GET['uspeh'] == 'izmenjeno') $poruka = '✅ Održavanje uspešno izmenjeno!';
+    if ($_GET['uspeh'] == 'obrisano') $poruka = '🗑️ Održavanje uspešno obrisano!';
 }
 ?>
 
@@ -50,15 +50,22 @@ if (isset($_GET['uspeh'])) {
 </nav>
 
 <div class="container mt-4">
+    <?php if ($poruka): ?>
+        <div class="alert alert-success"><?= $poruka ?></div>
+    <?php endif; ?>
+
     <div class="row mb-3">
-        <?php if ($poruka): ?>
-    <div class="alert alert-success"><?= $poruka ?></div>
-<?php endif; ?>
         <div class="col">
             <h2>🔧 Evidencija Održavanja</h2>
         </div>
         <div class="col text-end">
             <a href="odrzavanje_forma.php" class="btn btn-success">+ Dodaj održavanje</a>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text" id="pretraga" class="form-control" placeholder="🔍 Pretraži po opremi...">
         </div>
     </div>
 
@@ -96,5 +103,15 @@ if (isset($_GET['uspeh'])) {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.getElementById('pretraga').addEventListener('keyup', function() {
+    let vrednost = this.value.toLowerCase();
+    let redovi = document.querySelectorAll('tbody tr');
+    redovi.forEach(function(red) {
+        let oprema = red.cells[1].textContent.toLowerCase();
+        red.style.display = oprema.includes(vrednost) ? '' : 'none';
+    });
+});
+</script>
 </body>
 </html>

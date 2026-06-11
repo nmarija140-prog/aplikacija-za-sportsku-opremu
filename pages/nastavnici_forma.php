@@ -4,6 +4,10 @@ require_once '../classes/Nastavnici.php';
 
 Session::start();
 Session::requireLogin();
+if (Session::get('korisnik_uloga') !== 'admin') {
+    header("Location: ../index.php");
+    exit();
+}
 
 $nastavnici = new Nastavnici();
 $podaci = ['ime' => '', 'prezime' => '', 'email' => '', 'telefon' => '', 'predmet' => ''];

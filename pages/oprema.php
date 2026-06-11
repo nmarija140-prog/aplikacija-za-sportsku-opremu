@@ -51,14 +51,23 @@ if (isset($_GET['uspeh'])) {
 
 <div class="container mt-4">
     <?php if ($poruka): ?>
-    <div class="alert alert-success"><?= $poruka ?></div>
-<?php endif; ?>
+        <div class="alert alert-success"><?= $poruka ?></div>
+    <?php endif; ?>
+
     <div class="row mb-3">
         <div class="col">
             <h2>⚽ Evidencija Opreme</h2>
         </div>
         <div class="col text-end">
-            <a href="oprema_forma.php" class="btn btn-success">+ Dodaj opremu</a>
+           <?php if (Session::get('korisnik_uloga') === 'admin'): ?>
+    <a href="oprema_forma.php" class="btn btn-success">+ Dodaj opremu</a>
+<?php endif; ?>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text" id="pretraga" class="form-control" placeholder="🔍 Pretraži po nazivu...">
         </div>
     </div>
 
@@ -97,8 +106,10 @@ if (isset($_GET['uspeh'])) {
                     <td><?= $o['prostorija'] ?? 'N/A' ?></td>
                     <td><?= $o['datum_nabavke'] ?></td>
                     <td>
-                        <a href="oprema_forma.php?id=<?= $o['id'] ?>" class="btn btn-sm btn-warning">✏️</a>
-                        <a href="oprema.php?delete=<?= $o['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Obrisati?')">🗑️</a>
+                       <?php if (Session::get('korisnik_uloga') === 'admin'): ?>
+    <a href="oprema_forma.php?id=<?= $o['id'] ?>" class="btn btn-sm btn-warning">✏️</a>
+    <a href="oprema.php?delete=<?= $o['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Obrisati?')">🗑️</a>
+<?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -108,5 +119,15 @@ if (isset($_GET['uspeh'])) {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.getElementById('pretraga').addEventListener('keyup', function() {
+    let vrednost = this.value.toLowerCase();
+    let redovi = document.querySelectorAll('tbody tr');
+    redovi.forEach(function(red) {
+        let naziv = red.cells[1].textContent.toLowerCase();
+        red.style.display = naziv.includes(vrednost) ? '' : 'none';
+    });
+});
+</script>
 </body>
 </html>
